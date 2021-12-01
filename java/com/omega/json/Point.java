@@ -3,13 +3,13 @@ package com.omega.json;
 public class Point
 {
 
-  private final double x;
-  private final double y;
+  private final Decimal x;
+  private final Decimal y;
 
   private Point(double x, double y)
   {
-    this.x = x;
-    this.y = y;
+    this.x = Decimal.create(x, 7);
+    this.y = Decimal.create(y, 7);
   }
 
   public static Point create(double x, double y)
@@ -20,6 +20,6 @@ public class Point
   @Override
   public String toString()
   {
-    return String.format("[%s,%s]", DoubleTo.string(x, 7), DoubleTo.string(y, 7));
+    return String.format("[%s,%s]", x, y);
   }
 }
