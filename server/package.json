@@ -4,8 +4,11 @@
   "description": "express epatch cata collector api",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "start": "node src-js/index.js",
+    "dev": "nodemon src-js/index.js",
+    "clean": "rm -rf js",
+    "compile": "tsc",
+    "cc": "npm run clean && npm run compile"
   },
   "keywords": [
     "express",
