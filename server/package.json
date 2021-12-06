@@ -2,10 +2,11 @@
   "name": "project-omega",
   "version": "0.1.1",
   "description": "express epatch cata collector api",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "clean": "rm -rf js"
   },
   "keywords": [
     "express",
@@ -24,11 +25,13 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "helmet": "^4.6.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "node-fetch": "^2.6.6"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
     "@types/node": "^16.11.11",
+    "@types/node-fetch": "^3.0.3",
     "nodemon": "^2.0.7",
     "supertest": "^6.1.3"
   }
