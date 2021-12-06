@@ -12,7 +12,6 @@ function createFileFromPath(filePath) {
 
 function toFile(filePath) {
   return function (file) {
-    console.log("toFile inside", filePath);
     fs.writeFileSync(createFileFromPath(filePath), JSON.stringify(file), "utf-8");
   }
 }
