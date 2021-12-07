@@ -31,7 +31,7 @@ export interface OatAlgorithm {
 }
 
 export interface OatConfig {
-    [key: string]: string;
+    [key: string]: string | number;
 }
 
 /*

@@ -10,9 +10,10 @@ function createFileFromPath(filePath) {
   return `${createPath(filePath)}/${timestamp.utc('YYYY-MM-DD HH-mm-ss-ms')}.json`
 }
 
-function toFile(filePath) {
+function toFile(path) {
+  const filePath = createFileFromPath(path);
   return function (file) {
-    fs.writeFileSync(createFileFromPath(filePath), JSON.stringify(file), "utf-8");
+    fs.writeFileSync(filePath, JSON.stringify(file), "utf-8");
   }
 }
 
