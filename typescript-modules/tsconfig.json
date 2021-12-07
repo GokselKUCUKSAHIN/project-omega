@@ -7,8 +7,7 @@
     "rootDir": "./ts",
     "moduleResolution": "node",
     "removeComments": true,
-    "declaration": true
-    // default false
+    "declaration": true // default false
   },
   "exclude": [
     "node_modules",
