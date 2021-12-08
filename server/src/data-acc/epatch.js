@@ -16,14 +16,10 @@ const saver = saveFactory.toFile(filePath);
 router.post('/', (req, res, next) => {
   try {
     const body = req.body;
-    if (!!body) {
-      // res.send({status: "OK", body}).json();
-      const vmid = body.vmid;
-      saver(body, (!!vmid ? vmid : "unknown"));
-      res.sendStatus(200);
-    } else {
-      res.send(404);
-    }
+    if (!body) res.send(404);
+    const vmid = body.vmid;
+    saver(body, (!!vmid ? vmid : "unknown"));
+    res.sendStatus(200);
   } catch (err) {
     next(err);
   }
