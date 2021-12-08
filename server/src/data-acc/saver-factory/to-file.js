@@ -6,13 +6,17 @@ function createPath(filePath) {
   return filePath;
 }
 
-function createFileFromPath(filePath) {
-  return `${createPath(filePath)}/${timestamp.utc('YYYY-MM-DD HH-mm-ss-ms')}.json`
+function createFileFromPath(filePath, vmid) {
+  return `${createPath(filePath)}/${safeVMID(vmid)}${timestamp.utc('YYYY-MM-DD HH-mm-ss-ms')}.json`
 }
 
-function toFile(path) {
+function safeVMID(vmid) {
+  return ("" + vmid).replaceAll(/[ :.]/g, '-').trim();
+}
+
+function toFile(path, vmid) {
   return function (file) {
-    fs.writeFileSync(createFileFromPath(path), JSON.stringify(file), "utf-8");
+    fs.writeFileSync(createFileFromPath(path, vmid), JSON.stringify(file), "utf-8");
   }
 }
 
