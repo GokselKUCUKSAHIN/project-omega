@@ -18,7 +18,8 @@ router.post('/', (req, res, next) => {
     const body = req.body;
     if (!!body) {
       // res.send({status: "OK", body}).json();
-      saver(body);
+      const vmid = body.vmid;
+      saver(body, (!!vmid ? vmid : "unknown"));
       res.sendStatus(200);
     } else {
       res.send(404);
