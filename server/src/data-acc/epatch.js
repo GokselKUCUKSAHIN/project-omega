@@ -1,7 +1,7 @@
 const express = require('express');
 const saveFactory = require("./saver-factory");
 const Process = require("process");
-
+const isEmpty = require("../utils/is-empty");
 const router = express.Router();
 
 // data-acc/epatch/
@@ -16,7 +16,8 @@ const saver = saveFactory.toFile(filePath);
 router.post('/', (req, res, next) => {
   try {
     const body = req.body;
-    if (!body) res.send(404);
+    if (isEmpty(body)) return res.sendStatus(404);
+    console.log("body:", body);
     const vmid = body.vmid;
     saver(body, (!!vmid ? vmid : "unknown"));
     res.sendStatus(200);

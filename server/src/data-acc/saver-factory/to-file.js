@@ -1,5 +1,6 @@
 const fs = require("fs");
-const timestamp = require('time-stamp');
+const timestamp = require("time-stamp");
+const safeVMID = require("./safe-vmid");
 
 function createPath(filePath) {
   !fs.existsSync(filePath) && fs.mkdirSync(filePath, {recursive: true})
@@ -7,11 +8,7 @@ function createPath(filePath) {
 }
 
 function createFileFromPath(filePath, vmid) {
-  return `${createPath(filePath)}/${safeVMID(vmid)}${timestamp.utc('YYYY-MM-DD HH-mm-ss-ms')}.json`
-}
-
-function safeVMID(vmid) {
-  return ("" + vmid).replaceAll(/[ :.]/g, '-').trim();
+  return `${createPath(filePath)}/${safeVMID(vmid)} ${timestamp.utc("YYYY-MM-DD HH-mm-ss-ms")}.json`;
 }
 
 function toFile(path) {
