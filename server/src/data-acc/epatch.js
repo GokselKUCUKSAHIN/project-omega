@@ -19,6 +19,7 @@ router.post('/', (req, res, next) => {
     const body = req.body;
     if (isEmpty(body)) return res.sendStatus(404);
     console.log("body:", body);
+    // TODO Add Schema validation to body.
     const vmid = body.vmid;
     saver(body, (!!vmid ? formatInt(vmid) : "unknown"));
     res.sendStatus(200);
