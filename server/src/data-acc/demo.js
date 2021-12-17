@@ -6,4 +6,8 @@ const testObject = {
   name: "Göksel",
   age: 23
 }
-saver(testObject);
+// saver(testObject);
+
+const bodySchema = require("../utils/body-schema");
+
+bodySchema();
