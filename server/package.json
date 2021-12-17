@@ -29,7 +29,8 @@
     "morgan": "^1.10.0",
     "node-fetch": "^2.6.6",
     "process": "^0.11.10",
-    "time-stamp": "^2.2.0"
+    "time-stamp": "^2.2.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
@@ -38,6 +39,7 @@
     "@types/morgan": "^1.9.3",
     "@types/node": "^16.11.11",
     "@types/node-fetch": "^3.0.3",
+    "@types/yup": "^0.29.13",
     "nodemon": "^2.0.7"
   }
 }
