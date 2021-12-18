@@ -8,6 +8,6 @@ const testObject = {
 }
 // saver(testObject);
 
-const bodySchema = require("../utils/body-schema");
+const bodySchema = require("../utils/body-schema-validate");
 
 bodySchema();
