@@ -10,4 +10,6 @@ const testObject = {
 
 const bodySchema = require("../utils/body-schema-validate");
 
-bodySchema();
+bodySchema().then(v => {
+  console.log(v);
+});
