@@ -1,5 +1,6 @@
+const undefCheck = require("./undef-check");
 function formatInt(num, pad = 3) {
-  if (num === undefined) throw Error("Number Undefined.");
+  undefCheck(num, "Number Undefined.");
   return num.toString().padStart(pad, "0");
 }
 
