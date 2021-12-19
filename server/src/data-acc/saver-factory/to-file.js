@@ -12,6 +12,7 @@ function createFileFromPath(filePath, vmid) {
 }
 
 function toFile(path) {
+  if(path === undefined) throw Error("File Path Undefined.");
   return function (file, vmid) {
     fs.writeFileSync(createFileFromPath(path, vmid), JSON.stringify(file), "utf-8");
   }
