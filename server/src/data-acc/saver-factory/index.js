@@ -1,3 +1,3 @@
 const toFile = require("./to-file");
-
-module.exports = {toFile};
+const toDatabase = require("./to-database");
+module.exports = {toFile, toDatabase};
