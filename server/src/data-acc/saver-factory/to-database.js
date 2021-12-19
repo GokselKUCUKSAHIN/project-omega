@@ -1,4 +1,4 @@
-function toDatabase(){
+function toDatabase(databaseURI){
 
 }
 
