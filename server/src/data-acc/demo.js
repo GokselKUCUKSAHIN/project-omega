@@ -11,5 +11,9 @@ const testObject = {
 const bodySchema = require("../utils/body-schema-validate");
 
 bodySchema().then(v => {
-  console.log(v);
+  // console.log(v);
 });
+
+const mongoRegex = require("../constants/regex/mongo-uri");
+const testMongodbUri = "mongodb://superUser:pass123@10.1.8.88:asdsd";
+console.log(testMongodbUri.match(mongoRegex) !== null);
