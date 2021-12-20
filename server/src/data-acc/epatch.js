@@ -4,6 +4,7 @@ const Process = require("process");
 const isEmpty = require("../utils/is-empty");
 const formatInt = require("../utils/format-int");
 const bodySchemaValidator = require("../utils/body-schema-validate");
+const mongodbUriFactory = require("../utils/mongodb-uri-factory");
 const router = express.Router();
 
 // data-acc/epatch/
@@ -14,6 +15,12 @@ router.get('/', (req, res) => {
 
 const filePath = Process.env.FILE_PATH;
 const saver = saveFactory.toFile(filePath);
+
+const dbAddress = Process.env.DATABASE_ADR;
+const dbPort = Process.env.DATABASE_PORT;
+const dbUser = Process.env.DATABASE_USR;
+const dbPwd = Process.env.DATABASE_PWD
+const mongodbURI = mongodbUriFactory(dbAddress, dbPort, dbUser, dbPwd);
 
 router.post('/', (req, res, next) => {
   try {
