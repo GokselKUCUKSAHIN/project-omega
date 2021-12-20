@@ -1,6 +1,5 @@
 const express = require('express');
 const saveFactory = require("./saver-factory");
-const Process = require("process");
 const isEmpty = require("../utils/is-empty");
 const formatInt = require("../utils/format-int");
 const bodySchemaValidator = require("../utils/body-schema-validate");
@@ -13,13 +12,13 @@ router.get('/', (req, res) => {
 });
 
 
-const filePath = Process.env.FILE_PATH;
+const filePath = process.env.FILE_PATH;
 const saver = saveFactory.toFile(filePath);
 
-const dbAddress = Process.env.DATABASE_ADR;
-const dbPort = Process.env.DATABASE_PORT;
-const dbUser = Process.env.DATABASE_USR;
-const dbPwd = Process.env.DATABASE_PWD
+const dbAddress = process.env.DATABASE_ADR;
+const dbPort = process.env.DATABASE_PORT;
+const dbUser = process.env.DATABASE_USR;
+const dbPwd = process.env.DATABASE_PWD
 const mongodbURI = mongodbUriFactory(dbAddress, dbPort, dbUser, dbPwd);
 
 router.post('/', (req, res, next) => {
