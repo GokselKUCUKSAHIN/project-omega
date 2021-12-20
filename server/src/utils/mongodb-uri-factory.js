@@ -4,3 +4,5 @@ function mongodbUriFactory(address, port, usr, pwd) {
   const uri = `mongodb://${usr}:${pwd}@${address}:${port}`;
   return uri.match(mongoRegex) === null ? undefined : uri;
 }
+
+module.exports = mongodbUriFactory;
