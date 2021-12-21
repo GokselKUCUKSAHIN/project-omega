@@ -1,4 +1,5 @@
 const {MongoClient} = require("mongodb");
+const int = require("../utils/int");
 
 class MongodbDriver {
   constructor(url) {
@@ -7,8 +8,11 @@ class MongodbDriver {
   }
 
   async initialize() {
+    if (this.alive) return;
     await this.client.connect();
     this.alive = true;
+    this._id = `id:${int(Math.random() * 10_000)}`;
+    // TODO add to Callback list with _id
   }
 
   openDb(databaseName) {
@@ -36,15 +40,16 @@ class MongodbDriver {
   }
 
   async close() {
+    // TODO remove from callback list
+    return await this._autoClose()
+  }
+
+  /**@private */
+  async _autoClose() {
     if (this.alive) {
-      try {
-        await this.client.close();
-        this.alive = false;
-        return true;
-      } catch (err) {
-        console.error(err);
-        return false;
-      }
+      await this.client.close();
+      this.alive = false;
+      return true;
     }
     return false;
   }
@@ -57,3 +62,12 @@ async function mongoDbDriverFactory(url, alive = true) {
 }
 
 module.exports = mongoDbDriverFactory;
+
+// DEMO
+
+mongoDbDriverFactory("hello.com").then(driver => {
+  const collection = driver.openDb("epatch").openCollection("results");
+  collection.find({}).then(findResult => {
+    console.log(findResult.toArray());
+  })
+});
