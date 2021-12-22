@@ -1,5 +1,5 @@
 const {MongoClient} = require("mongodb");
-// const onCloseEvent = require("../utils/onclose-event");
+const undefCheck = require("../utils/undef-check");
 const int = require("../utils/int");
 
 class MongodbDriver {
@@ -14,14 +14,13 @@ class MongodbDriver {
     await this.client.connect();
     this.alive = true;
     this._id = `id:${int(Math.random() * 10_000)}`; // TODO impl randomInt function
-    // TODO add to Callback list with _id
-    // onCloseEvent.addCallback(this._id, this._autoClose); // TODO TEST THIS will not behave as i expected???
+    // onCloseEvent.addCallback(this._id, this._autoClose); // TODO add to Callback list with _id // TODO TEST THIS will not behave as i expected???
   }
 
   /**@param databaseName {string}
    * @returns {MongodbDriver}
    */
-  openDatabase(databaseName){
+  openDatabase(databaseName) {
     this._checkAlive();
     /**@type {Db} */
     this.database = this.client.db(databaseName);
@@ -62,14 +61,33 @@ class MongodbDriver {
 
   /**@private */
   _checkAlive() {
-    if (!this.alive) throw Error("Connection is not alive. Connection dead or never initialized.");
+    if (!this.isAlive()) throw Error("Connection is not alive. Connection dead or never initialized.");
+  }
+
+  /**@param body{Object}
+   * @return {Promise<InsertOneResult<TSchema>>}
+   */
+  async insertOne(body) {
+    this._checkAlive();
+    undefCheck(body, "Object undefined.");
+    if (Array.isArray(body)) throw Error("Can't use Arrays on insertOne method.");
+    return await this.collection.insertOne(body);
+  }
+
+  /**@param bodyArray{Array<Object>}
+   * @return {Promise<InsertManyResult<TSchema>>}
+   */
+  async insertMany(bodyArray) {
+    this._checkAlive();
+    undefCheck(bodyArray, "Object Array undefined.");
+    if (!Array.isArray(bodyArray)) throw Error("bodyArray must be Object Array.");
+    return await this.collection.insertMany(bodyArray);
   }
 
   /**@return {Promise<boolean>} */
   async close() {
-    // TODO remove from callback list
     console.log("Exit called", this._id);
-    // onCloseEvent.removeCallback(this._id);
+    // onCloseEvent.removeCallback(this._id); // TODO remove from callback list
     return await this._autoClose()
   }
 
@@ -103,11 +121,14 @@ module.exports = mongoDbDriverFactory;
 //   collection.find({"result.fitness": {$eq: -217.7991357}}).toArray().then(console.log)
 // });
 
-// DEMO with async/await (IIFE)
-//
-// (async _ => {
-//   const driver = await mongoDbDriverFactory("mongodb://superUser:pass123@10.1.8.88:27017");
-//   const collection = driver.db("epatch").get("results");
-//   const results = await collection.find({"result.fitness": {$eq: -217.7991357}}).toArray();
-//   console.log(results);
-// })();
+
+// DEMO with async / await (IIFE)
+
+(async _ => {
+  const driver = await mongoDbDriverFactory("mongodb://superUser:pass123@10.1.8.88:27017");
+  const collection = driver.db("driver").get("demo");
+  await driver.insertMany([{name: "Bilal", surname: "Babayiğit"}, {name: "Murat", surname: "Türkmen"}]);
+  console.log(await collection.find({}).toArray());
+  // const results = await collection.find({"result.fitness": {$eq: -217.7991357}}).toArray();
+  // console.log(results);
+})();

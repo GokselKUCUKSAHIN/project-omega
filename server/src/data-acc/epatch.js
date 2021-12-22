@@ -13,8 +13,8 @@ router.get('/', (req, res) => {
 
 
 const filePath = process.env.FILE_PATH;
-const saver = saveFactory.toFile(filePath);
-
+// const saver = saveFactory.toFile(filePath);
+const {saver, closeDb} = saveFactory.toDatabase();
 const dbAddress = process.env.DATABASE_ADR;
 const dbPort = process.env.DATABASE_PORT;
 const dbUser = process.env.DATABASE_USR;
