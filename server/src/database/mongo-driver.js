@@ -1,7 +1,6 @@
 const {MongoClient} = require("mongodb");
 // const onCloseEvent = require("../utils/onclose-event");
 const int = require("../utils/int");
-const sleep = require("../utils/sleep");
 
 class MongodbDriver {
   constructor(url) {
@@ -9,38 +8,54 @@ class MongodbDriver {
     this.client = new MongoClient(url);
   }
 
+  /**@return {Promise<void>} */
   async initialize() {
     if (this.alive) return;
     await this.client.connect();
     this.alive = true;
-    this._id = `id:${int(Math.random() * 10_000)}`;
+    this._id = `id:${int(Math.random() * 10_000)}`; // TODO impl randomInt function
     // TODO add to Callback list with _id
     // onCloseEvent.addCallback(this._id, this._autoClose); // TODO TEST THIS will not behave as i expected???
   }
 
-  /**
-   * @param databaseName {string}
+  /**@param databaseName {string}
    * @returns {MongodbDriver}
    */
-  openDb(databaseName) {
+  openDatabase(databaseName){
     this._checkAlive();
     /**@type {Db} */
-    this.db = this.client.db(databaseName);
+    this.database = this.client.db(databaseName);
     this.collection = void 0;
     return this;
   }
 
-  /**
-   * @param collectionName {string}
+  /**@param databaseName {string}
    * @returns {MongodbDriver}
+   * @alias MongoDriver.openDatabase
    */
-  openCollection(collectionName) {
-    this._checkAlive();
-    /**@type {Collection<Document>} */
-    this.collection = this.db.collection(collectionName);
-    return this;
+  db(databaseName) {
+    return this.openDatabase(databaseName);
   }
 
+  /**@param collectionName
+   * @return {Collection<Document>}
+   */
+  openConnection(collectionName) {
+    this._checkAlive();
+    /**@type {Collection<Document>} */
+    this.collection = this.database.collection(collectionName);
+    return this.collection;
+  }
+
+  /**@param collectionName {string}
+   * @return {Collection<Document>}
+   * @alias MongodbDriver.openConnection
+   */
+  get(collectionName) {
+    return this.openConnection(collectionName);
+  }
+
+  /**@return {boolean} */
   isAlive() {
     return this.alive;
   }
@@ -50,18 +65,21 @@ class MongodbDriver {
     if (!this.alive) throw Error("Connection is not alive. Connection dead or never initialized.");
   }
 
-  close() {
+  /**@return {Promise<boolean>} */
+  async close() {
     // TODO remove from callback list
     console.log("Exit called", this._id);
     // onCloseEvent.removeCallback(this._id);
-    return this._autoClose()
+    return await this._autoClose()
   }
 
-  /**@private */
-  _autoClose() {
+  /**@private
+   * @return {Promise<boolean>}
+   */
+  async _autoClose() {
     console.log("ID=", this._id);
     if (this.alive) {
-      // await this.client.close();
+      await this.client.close();
       this.alive = false;
       return true;
     }
@@ -82,17 +100,14 @@ module.exports = mongoDbDriverFactory;
 // mongoDbDriverFactory("mongodb://superUser:pass123@10.1.8.88:27017").then(driver => {
 //   /**@type {Collection<Document>} */
 //   const collection = driver.openDb("epatch").openCollection("results").collection;
-//   collection.find({}).toArray().then(results => {
-//     console.log(results);
-//   });
+//   collection.find({"result.fitness": {$eq: -217.7991357}}).toArray().then(console.log)
 // });
 
-// DEMO with async/awaitv (IIFE)
-
-(async _ => {
-  const driver = await mongoDbDriverFactory("mongodb://superUser:pass123@10.1.8.88:27017");
-  const collection = driver.openDb("epatch").openCollection("results").collection;
-  const results = await collection.find({}).toArray();
-  console.log(results);
-})();
-
+// DEMO with async/await (IIFE)
+//
+// (async _ => {
+//   const driver = await mongoDbDriverFactory("mongodb://superUser:pass123@10.1.8.88:27017");
+//   const collection = driver.db("epatch").get("results");
+//   const results = await collection.find({"result.fitness": {$eq: -217.7991357}}).toArray();
+//   console.log(results);
+// })();
