@@ -110,6 +110,10 @@ class MongodbDriver {
   }
 }
 
+/**@param url
+ * @param alive
+ * @return {Promise<MongodbDriver>}
+ */
 async function mongoDbDriverFactory(url, alive = true) {
   const mongoDriver = new MongodbDriver(url);
   if (alive) await mongoDriver.initialize();
@@ -119,16 +123,15 @@ async function mongoDbDriverFactory(url, alive = true) {
 module.exports = {mongoDbDriverFactory};
 
 // DEMO with Promises
-
+//
 // mongoDbDriverFactory("mongodb://superUser:pass123@10.1.8.88:27017").then(driver => {
 //   /**@type {Collection<Document>} */
 //   const collection = driver.openDb("epatch").openCollection("results").collection;
 //   collection.find({"result.fitness": {$eq: -217.7991357}}).toArray().then(console.log)
 // });
 
-
 // DEMO with async / await (IIFE)
-
+//
 // (async _ => {
 //   const driver = await mongoDbDriverFactory("mongodb://superUser:pass123@10.1.8.88:27017");
 //   const collection = driver.db("driver").get("demo");
@@ -139,27 +142,34 @@ module.exports = {mongoDbDriverFactory};
 // })();
 
 // DEMO with tryCatch Decorator
+// 
+// async function bomb(millis) {
+//   await sleep(millis);
+//   throw Error("BOOOOMMMM!!!");
+// }
+//
+// const defusedBomb = tryCatch(bomb);
+//
+// (async _=>{
+//   const [,err] = defusedBomb(1000);
+//   if(err) console.error("Defused")
+// })();
 
-async function bomb(millis) {
-  await sleep(millis);
-  throw Error("BOOOOMMMM!!!");
-}
+// /**
+//  *
+//  * @type {function(): Promise<[*,null]|[null,*]}
+//  */
 
-/**
- *
- * @type {function(): Promise<[*,null]|[null,*]}
- */
-const defusedBomb = tryCatch(bomb);
-
-const mongoDbDriverFactoryWithErrorHandling = tryCatch(mongoDbDriverFactory);
-
-(async _ => {
-  const [driver, err] = await tryCatch(mongoDbDriverFactory)("mongodb://superUser:pass123@10.1.8.88:27017");
-  const collection = driver.db("epatch").get("results");
-  console.log(await collection.find({}).toArray());
-
-
-})();
+//
+// const mongoDbDriverFactoryWithErrorHandling = tryCatch(mongoDbDriverFactory);
+//
+// (async _ => {
+//   const [driver, err] = await tryCatch(mongoDbDriverFactory)("mongodb://superUser:pass123@10.1.8.88:27017");
+//   const collection = driver.db("epatch").get("results");
+//   console.log(await collection.find({}).toArray());
+//
+//
+// })();
 
 // const [driver, err] = await mongoDbDriverFactoryWithErrorHandling("mongodb://superUser:pass123@10.1.8.88:27017");
 // const results = await collection.find({"result.fitness": {$eq: -217.7991357}}).toArray();

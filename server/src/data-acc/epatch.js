@@ -11,10 +11,10 @@ router.get('/', (req, res) => {
   res.json(['😀', '😳', '🙄']);
 });
 
-
 const filePath = process.env.FILE_PATH;
-// const saver = saveFactory.toFile(filePath);
-const {saver, closeDb} = saveFactory.toDatabase();
+const fileSaver = saveFactory.toFile(filePath);
+
+const {dbSaver, dBclose, dBswitch} = saveFactory.toDatabase();
 const dbAddress = process.env.DATABASE_ADR;
 const dbPort = process.env.DATABASE_PORT;
 const dbUser = process.env.DATABASE_USR;
@@ -27,6 +27,7 @@ router.post('/', (req, res, next) => {
     if (isEmpty(body)) return res.sendStatus(404);
     if (!bodySchemaValidator(body)) return res.sendStatus(418); // I'm a tea pod
     const vmid = body.vmid;
+    // SAVE
     saver(body, (!!vmid ? formatInt(vmid) : "unknown"));
     res.sendStatus(200);
   } catch (err) {
