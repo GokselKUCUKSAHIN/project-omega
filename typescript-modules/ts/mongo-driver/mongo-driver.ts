@@ -5,7 +5,6 @@ import {
     Document,
     OptionalId,
     InsertOneOptions,
-    Callback,
     InsertOneResult,
     InsertManyResult,
     BulkWriteOptions
@@ -18,7 +17,7 @@ class MongodbDriver {
     private alive: boolean = false;
     private client: MongoClient;
     private database: Db;
-    private collection: Collection<Document>
+    private collection: Collection;
 
     constructor(url: string) {
         // TODO url check
@@ -43,25 +42,25 @@ class MongodbDriver {
         return this.openDatabase(databaseName);
     }
 
-    public openConnection(collectionName: string): Collection<Document> {
+    public openConnection(collectionName: string): Collection {
         // TODO check collectionName to be not null or undefined
         this.checkAlive();
         this.collection = this.database.collection(collectionName);
         return this.collection;
     }
 
-    public get(collectionName: string): Collection<Document> {
+    public get(collectionName: string): Collection {
         return this.openConnection(collectionName);
     }
 
-    public async insertOne(doc: OptionalId<Document>, options?: InsertOneOptions, callback?: Callback<InsertOneResult>): Promise<InsertOneResult> {
+    public async insertOne(doc: OptionalId<Document>, options?: InsertOneOptions): Promise<InsertOneResult> {
         this.checkAlive();
         undefCheck(doc, "Object undefined.");
         if (Array.isArray(doc)) throw Error("Can't use Arrays on insertOne method.");
-        return await this.collection.insertOne(doc);
+        return await this.collection.insertOne(doc, options);
     }
 
-    public async insertMany(docs: OptionalId<Document>[], options?: BulkWriteOptions): Promise<InsertManyResult<Document>> {
+    public async insertMany(docs: OptionalId<Document>[], options?: BulkWriteOptions): Promise<InsertManyResult> {
         this.checkAlive();
         undefCheck(docs, "Object Array undefined.");
         if (!Array.isArray(docs)) throw Error("bodyArray must be an Object Array.");
