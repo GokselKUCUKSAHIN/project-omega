@@ -4,10 +4,10 @@ const emojis = require('./emojis');
 
 const router = express.Router();
 
+const myObject = Object.freeze({message: 'API - 👋🌎🌍🌏'});
+
 router.get('/', (req, res) => {
-  res.json({
-    message: 'API - 👋🌎🌍🌏'
-  });
+  res.json(myObject);
 });
 
 router.use('/emojis', emojis);

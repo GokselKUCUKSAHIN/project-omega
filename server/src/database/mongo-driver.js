@@ -71,21 +71,21 @@ class MongodbDriver {
   /**@param body{Object}
    * @return {Promise<InsertOneResult<TSchema>>}
    */
-  async insertOne(body) {
+  async insertOne(body, ...args) {
     this._checkAlive();
     undefCheck(body, "Object undefined.");
     if (Array.isArray(body)) throw Error("Can't use Arrays on insertOne method.");
-    return await this.collection.insertOne(body);
+    return await this.collection.insertOne(body, args);
   }
 
   /**@param bodyArray{Array<Object>}
    * @return {Promise<InsertManyResult<TSchema>>}
    */
-  async insertMany(bodyArray) {
+  async insertMany(bodyArray, ...args) {
     this._checkAlive();
     undefCheck(bodyArray, "Object Array undefined.");
-    if (!Array.isArray(bodyArray)) throw Error("bodyArray must be Object Array.");
-    return await this.collection.insertMany(bodyArray);
+    if (!Array.isArray(bodyArray)) throw Error("bodyArray must be an Object Array.");
+    return await this.collection.insertMany(bodyArray, args);
   }
 
   /**@return {Promise<boolean>} */
@@ -174,8 +174,6 @@ const mongoDbDriverFactoryWithErrorHandling = tryCatch(mongoDbDriverFactory);
   const [driver, err] = await mongoDbDriverFactoryWithErrorHandling("mongodb://superUser:pass123@10.1.8.88:27017");
   const collection = driver.db("epatch").get("results");
   console.log(await collection.find({}).toArray());
-
-
 
 
 })();
