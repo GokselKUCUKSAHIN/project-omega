@@ -116,17 +116,6 @@ async function mongoDbDriverFactory(url, alive = true) {
   return mongoDriver;
 }
 
-/*
-async function mongoDbDriverFactoryWithErrorHandling(url, alive = true) {
-  try {
-    const driver = await mongoDbDriverFactory(url, alive);
-    return [driver, null];
-  } catch (err) {
-    return [null, err];
-  }
-}
-*/
-
 module.exports = {mongoDbDriverFactory};
 
 // DEMO with Promises
@@ -162,16 +151,10 @@ async function bomb(millis) {
  */
 const defusedBomb = tryCatch(bomb);
 
-
 const mongoDbDriverFactoryWithErrorHandling = tryCatch(mongoDbDriverFactory);
 
 (async _ => {
-  // const [, err] = await defusedBomb(1000);
-  // if (err) console.error("Error handled")
-  // const [, err] = await defusedBomb(1000);
-  // if (err) console.log("DEFUSED!");
-
-  const [driver, err] = await mongoDbDriverFactoryWithErrorHandling("mongodb://superUser:pass123@10.1.8.88:27017");
+  const [driver, err] = await tryCatch(mongoDbDriverFactory)("mongodb://superUser:pass123@10.1.8.88:27017");
   const collection = driver.db("epatch").get("results");
   console.log(await collection.find({}).toArray());
 

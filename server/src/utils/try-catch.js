@@ -1,3 +1,5 @@
+const sleep = require("../utils/sleep");
+
 /**
  *
  * @param asyncCallback
@@ -15,3 +17,14 @@ function tryCatch(asyncCallback) {
 }
 
 module.exports = tryCatch;
+
+// async function bomb(millis) {
+//   await sleep(millis);
+//   throw Error("BOOOOMMMM!!!");
+// }
+//
+// /**
+//  *
+//  * @type {function(): Promise<[*,null]|[null,*]}
+//  */
+// const defusedBomb = tryCatch(bomb);
