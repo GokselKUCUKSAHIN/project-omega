@@ -2,6 +2,9 @@ const {MongoClient} = require("mongodb");
 const undefCheck = require("../utils/undef-check");
 const int = require("../utils/int");
 
+const tryCatch = require("../utils/try-catch");
+const sleep = require("../utils/sleep");
+
 class MongodbDriver {
   constructor(url) {
     this.alive = false;
@@ -14,7 +17,8 @@ class MongodbDriver {
     await this.client.connect();
     this.alive = true;
     this._id = `id:${int(Math.random() * 10_000)}`; // TODO impl randomInt function
-    // onCloseEvent.addCallback(this._id, this._autoClose); // TODO add to Callback list with _id // TODO TEST THIS will not behave as i expected???
+    // onCloseEvent.addCallback(this._id, this._autoClose); // TODO add to Callback list with _id
+    // TODO TEST THIS will not behave as i expected???
   }
 
   /**@param databaseName {string}
@@ -87,7 +91,8 @@ class MongodbDriver {
   /**@return {Promise<boolean>} */
   async close() {
     console.log("Exit called", this._id);
-    // onCloseEvent.removeCallback(this._id); // TODO remove from callback list
+    // onCloseEvent.removeCallback(this._id);
+    // TODO remove from callback list
     return await this._autoClose()
   }
 
@@ -111,7 +116,16 @@ async function mongoDbDriverFactory(url, alive = true) {
   return mongoDriver;
 }
 
-module.exports = mongoDbDriverFactory;
+async function mongoDbDriverFactoryWithErrorHandling(url, alive = true) {
+  try {
+    const driver = await mongoDbDriverFactory(url, alive);
+    return [driver, null];
+  } catch (err) {
+    return [null, err];
+  }
+}
+
+module.exports = {mongoDbDriverFactory,};
 
 // DEMO with Promises
 
@@ -124,11 +138,29 @@ module.exports = mongoDbDriverFactory;
 
 // DEMO with async / await (IIFE)
 
+// (async _ => {
+//   const driver = await mongoDbDriverFactory("mongodb://superUser:pass123@10.1.8.88:27017");
+//   const collection = driver.db("driver").get("demo");
+//   await driver.insertMany([{name: "Bilal", surname: "Babayiğit"}, {name: "Murat", surname: "Türkmen"}]);
+//   console.log(await collection.find({}).toArray());
+//   // const results = await collection.find({"result.fitness": {$eq: -217.7991357}}).toArray();
+//   // console.log(results);
+// })();
+
+// DEMO with tryCatch Decorator
+
+async function bomb(millis) {
+  await sleep(millis);
+  throw Error("BOOOOMMMM!!!");
+}
+
+const defusedBomb = tryCatch(bomb);
+
 (async _ => {
-  const driver = await mongoDbDriverFactory("mongodb://superUser:pass123@10.1.8.88:27017");
-  const collection = driver.db("driver").get("demo");
-  await driver.insertMany([{name: "Bilal", surname: "Babayiğit"}, {name: "Murat", surname: "Türkmen"}]);
-  console.log(await collection.find({}).toArray());
-  // const results = await collection.find({"result.fitness": {$eq: -217.7991357}}).toArray();
-  // console.log(results);
+  const [, err] = await defusedBomb(1000);
+  if (err) console.log("DEFUSED!");
 })();
+
+// const [driver, err] = await mongoDbDriverFactoryWithErrorHandling("mongodb://superUser:pass123@10.1.8.88:27017");
+// const results = await collection.find({"result.fitness": {$eq: -217.7991357}}).toArray();
+// console.log(results);
