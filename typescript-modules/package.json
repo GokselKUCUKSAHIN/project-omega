@@ -4,12 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "date +\"%T\" && echo \"Cleaning...\" && rm -rf ./js && echo \"Compiling...\" && tsc && echo \"Done!\" && date +\"%T\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GokselKUCUKSAHIN/int/issues"
+  },
   "dependencies": {
+    "@jellybeanci/int": "^0.0.2",
     "mongodb": "^4.2.2"
   }
 }
