@@ -14,7 +14,11 @@ router.get('/', (req, res) => {
 const filePath = process.env.FILE_PATH;
 const fileSaver = saveFactory.toFile(filePath);
 
+// Object Destructuring
 const {dbSaver, dBclose, dBswitch} = saveFactory.toDatabase();
+
+
+
 const dbAddress = process.env.DATABASE_ADR;
 const dbPort = process.env.DATABASE_PORT;
 const dbUser = process.env.DATABASE_USR;
