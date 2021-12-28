@@ -27,7 +27,7 @@ const mongodbURI = mongodbUriFactory(dbAddress, dbPort, dbUser, dbPwd);
 router.post('/', (req, res, next) => {
   try {
     const body = req.body;
-    if (isEmpty(body)) return res.sendStatus(404);
+    if (isEmpty(body)) return res.sendStatus(400);
     if (!bodySchemaValidator(body)) return res.sendStatus(418); // I'm a tea pod
     const vmid = body.vmid;
     // SAVE
