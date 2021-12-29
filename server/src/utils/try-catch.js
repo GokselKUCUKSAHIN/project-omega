@@ -3,7 +3,7 @@ const sleep = require("../utils/sleep");
 /**
  *
  * @param asyncCallback
- * @returns {Promise<(function(): Promise<[*,null]|[null,*]|null[]|undefined>)|*>}
+ * @returns {function(): Promise<[*,null]|[null,*]|null[]|undefined>}
  */
 function tryCatch(asyncCallback) {
   return async function (...args) {

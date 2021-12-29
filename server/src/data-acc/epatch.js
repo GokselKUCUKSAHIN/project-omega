@@ -17,21 +17,21 @@ const fileSaver = saveFactory.toFile(filePath);
 // Object Destructuring
 const {dbSaver, dBclose, dBswitch} = saveFactory.toDatabase();
 
-
-
 const dbAddress = process.env.DATABASE_ADR;
 const dbPort = process.env.DATABASE_PORT;
 const dbUser = process.env.DATABASE_USR;
-const dbPwd = process.env.DATABASE_PWD
+const dbPwd = process.env.DATABASE_PWD;
+
 const mongodbURI = mongodbUriFactory(dbAddress, dbPort, dbUser, dbPwd);
 
 router.post('/', (req, res, next) => {
   try {
     const body = req.body;
-    if (isEmpty(body)) return res.sendStatus(404);
+    if (isEmpty(body)) return res.sendStatus(400);
     if (!bodySchemaValidator(body)) return res.sendStatus(418); // I'm a tea pod
     const vmid = body.vmid;
     // SAVE
+    // TODO change to save Database.
     saver(body, (!!vmid ? formatInt(vmid) : "unknown"));
     res.sendStatus(200);
   } catch (err) {

@@ -1,4 +1,2 @@
-function isEmpty(obj) {
-  return Object.keys(obj).length === 0;
-}
+const isEmpty = (obj) => Object.keys(obj).length === 0;
 module.exports = isEmpty;
