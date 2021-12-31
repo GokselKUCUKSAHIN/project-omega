@@ -1,7 +1,7 @@
-const {mongoDbDriverFactory} = require("../../database/mongo-driver");
+const {mongoDbDriverFactory} = require("moosedb");
 const bodySchemaValidate = require("../../utils/body-schema-validate");
+const {undefCheck} = require("undef-check");
 const tryCatch = require("../../utils/try-catch");
-const undefCheck = require("../../utils/undef-check");
 
 async function toDatabase(databaseURI, dbName, collectionName) {
   undefCheck(databaseURI, "Database URI Undefined.");
@@ -17,7 +17,7 @@ async function toDatabase(databaseURI, dbName, collectionName) {
      */
     dBsaver: async function (result, validate = false) {
       if (validate && !(await bodySchemaValidate(result))) return false;
-      return !!driver.insertOne(result);
+      return collection.insertOne(result);
     },
     /**@param dbName {string}
      * @param collectionName {string}

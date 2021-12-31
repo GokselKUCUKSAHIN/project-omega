@@ -1,7 +1,7 @@
 const fs = require("fs");
 const timestamp = require("time-stamp");
 const safeVMID = require("../../utils/safe-vmid");
-const undefCheck = require("../../utils/undef-check");
+const {undefCheck} = require("undef-check");
 
 function createPath(filePath) {
   !fs.existsSync(filePath) && fs.mkdirSync(filePath, {recursive: true})
