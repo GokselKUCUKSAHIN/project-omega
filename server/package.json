@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "build": "browserify --node --ignore-missing src/index.js | terser > bundle/bundle.js",
+    "build": "mkdir bundle && browserify --node --ignore-missing src/index.js | terser > bundle/bundle.js",
     "clean": "rm -rf js"
   },
   "keywords": [
