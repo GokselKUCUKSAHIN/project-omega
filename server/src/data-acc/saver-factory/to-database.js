@@ -1,7 +1,7 @@
 const {mongoDbDriverFactory} = require("moosedb");
 const bodySchemaValidate = require("../../utils/body-schema-validate");
 const {undefCheck} = require("undef-check");
-const isEmpty = require("../../utils/is-empty");
+const {isEmpty} = require("@jellybeanci/is-empty");
 const tryCatch = require("../../utils/try-catch");
 
 async function toDatabase(databaseURI, dbName, collectionName) {
