@@ -1,4 +1,4 @@
-const sleep = require("../utils/sleep");
+const {sleep} = require("@jellybeanci/sleep");
 
 /**
  *

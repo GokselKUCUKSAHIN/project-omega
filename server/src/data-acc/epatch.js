@@ -1,6 +1,6 @@
 const express = require('express');
 const saveFactory = require("./saver-factory");
-const isEmpty = require("../utils/is-empty");
+const {isEmpty} = require("@jellybeanci/is-empty");
 const formatInt = require("../utils/format-int");
 const bodySchemaValidator = require("../utils/body-schema-validate");
 const mongodbUriFactory = require("../utils/mongodb-uri-factory");
