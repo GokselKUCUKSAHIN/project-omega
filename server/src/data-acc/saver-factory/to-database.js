@@ -14,7 +14,7 @@ async function toDatabase(databaseURI, dbName, collectionName) {
   return async function (document, validate = false) {
     undefCheck(document, "Documents cannot be undefined or null.");
     if (isEmpty(document)) throw Error("Document cannot be empty.");
-    if (validate && !(await bodySchemaValidate(result))) return false;
+    if (validate && !(await bodySchemaValidate(document))) return false;
     collection.insertOne(document).then(console.log);
   }
 }

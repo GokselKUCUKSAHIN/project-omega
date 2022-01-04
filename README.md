@@ -1,2 +1,3 @@
 # project-omega
-Java based Data Acquisition Package and JavaScript based RESTful collector API.
+
+JavaScript/TypeScript based RESTful data acquisition API. For metaheuristic optimization algorithms.
