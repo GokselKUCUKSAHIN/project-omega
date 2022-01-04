@@ -2,6 +2,11 @@ const yup = require("yup");
 
 const schema = Object.freeze(yup.object().shape({
   vmid: yup.string().trim().matches(/[\wğüşıöç\- ]{1,50}/i).required(),
+  run: yup.object().shape({
+    id: yup.string().trim().matches(/[a-z0-9\-_]{10}/i).required(),
+    startTime: yup.number().integer().max(9223372036854775807).required(),
+    stopTime: yup.number().integer().max(9223372036854775807).required()
+  }),
   result: yup.object().shape({
     status: yup.mixed().oneOf(["SUCCESSFUL", "FAILED"]).required(),
     params: yup.object().shape({
